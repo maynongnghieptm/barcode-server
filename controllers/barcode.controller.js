@@ -7,15 +7,15 @@ class BarcodeController {
             const BottleSizeCode = req.body.BottleSizeCode
             const ReagentTyprCode = req.body.ReagentTyprCode
             const DayProduce = req.body.DayProduce.toString()
-          //  console.log("day,", DayProduce)
+            //  console.log("day,", DayProduce)
             const MonthProduce = req.body.MonthProduce.toString()
-           // console.log("month,", MonthProduce)
+            // console.log("month,", MonthProduce)
             const YearProduce = req.body.YearProduce.toString()
-           // console.log("year,", YearProduce)
+            // console.log("year,", YearProduce)
             const ExpiryMonth = req.body.ExpiryMonth
             const ExpiryDay = req.body.ExpiryDay
             const ExpiryYear = req.body.ExpiryYear
-            const ExpiryWeek = req.body.ExpiryWeek
+            const Expiry_Month = req.body.Expiry_Month
             const LotNumber = req.body.LotNumber
             const MinSequenceNumber = parseInt(req.body.MinSequenceNumber)
             const MaxSequenceNumber = parseInt(req.body.MaxSequenceNumber)
@@ -45,7 +45,7 @@ class BarcodeController {
             //const newNumber = parseInt(combinedNumberString);
             //c/onst inputDate =DayProduce+"-"+MonthProduce+"-"+YearProduce
             //console.log(inputDate)
-            var numberOfWeeksToAdd = ExpiryWeek;
+            var numberOfWeeksToAdd = Expiry_Month;
             var dateObject = new Date(YearProduce, MonthProduce - 1, DayProduce); // Lưu ý: Tháng trong JavaScript là từ 0 đến 11, nên giảm đi 1
             dateObject.setUTCHours(7)
             //var dateObject = new Date(inputDate);
@@ -62,7 +62,7 @@ class BarcodeController {
             //console.log("start date,"+startDate)
             // Tính toán số thứ tự của tuần trong năm
             //var startOfYear = new Date(dateObject1.getFullYear(), 0, 1); // Ngày đầu tiên của năm
-            var dayfromweek = 7 * ExpiryWeek
+            var dayfromweek = 30 * Expiry_Month
             //var weekNumber = Math.ceil((daysSinceStart + 1) / 7); // Tính số thứ tự của tuần
             var newDate = new Date(startDate.getTime() + dayfromweek * 24 * 60 * 60 * 1000);
             newDate.setUTCHours(7)
@@ -75,6 +75,7 @@ class BarcodeController {
                   dayfromweek+=7
               }
               */
+
             var Ngayhethan = new Date(startDate.getTime() + (dayfromweek) * 24 * 60 * 60 * 1000);
             var Ngayhethan2 = new Date(Date.UTC(2026, 0, 10))
             Ngayhethan.setUTCHours(7)
@@ -92,8 +93,8 @@ class BarcodeController {
             var millisecondsDiff = Ngayhethan - specificDate;
             // Tính số tuần
             var weeksDiff = Math.floor(millisecondsDiff / (7 * 24 * 60 * 60 * 1000));
-            var weeksDiff2 =Math.floor( (Ngayhethan- Timngaydautienlathu7cua1nam(Ngayhethan.getFullYear()) )/( 7*24 * 60 * 60 * 1000) +1 ) 
-          //  console.log("weeksDiff2:",weeksDiff2)
+            var weeksDiff2 = Math.floor((Ngayhethan - Timngaydautienlathu7cua1nam(Ngayhethan.getFullYear())) / (7 * 24 * 60 * 60 * 1000) + 1)
+            //  console.log("weeksDiff2:",weeksDiff2)
             //console.log("weeksDiff",weeksDiff)
             const CompanyCode_cheked = checkCompanyCode(1, 999, CompanyCode, 3)
             const MethodCode_cheked = checkCompanyCode(1, 99, MethodCode, 2)
@@ -103,43 +104,49 @@ class BarcodeController {
             const ReagentTyprCode_checked = checkCompanyCode(1, 6, ReagentTyprCode, 1)
             const weeksDiff_checked = checkCompanyCode(1, 53, weeksDiff2.toString(), 2)
             var SequenceNumber_checked = 0
-            const LotNumber_checked = checkCompanyCode(0, 9999, LotNumber, 3)
+            const LotNumber_checked = checkCompanyCode(0, 999, LotNumber, 3)
             const ngaydau2025 = Timngaydautienlathu7cua1nam(2025)
-           // console.log("Ngay dau tien cua nam 2025:",ngaydau2025)
+            // console.log("Ngay dau tien cua nam 2025:",ngaydau2025)
             const yearhethan_string = Ngayhethan.getFullYear().toString()
-        //    console.log("test1:",Tim_nam_het_han_tu_ma_vach(6,2029))
-       //     console.log("test2:",Tim_nam_het_han_tu_ma_vach(7,2029))
-         //   console.log("test3:",Tim_nam_het_han_tu_ma_vach(9,2029))
-         //   console.log("test4:",Tim_nam_het_han_tu_ma_vach(2,2029))
+            //    console.log("test1:",Tim_nam_het_han_tu_ma_vach(6,2029))
+            //     console.log("test2:",Tim_nam_het_han_tu_ma_vach(7,2029))
+            //   console.log("test3:",Tim_nam_het_han_tu_ma_vach(9,2029))
+            //   console.log("test4:",Tim_nam_het_han_tu_ma_vach(2,2029))
 
             if (MaxSequenceNumber === 0) {
-                SequenceNumber_checked = checkCompanyCode(0, 999, MinSequenceNumber, 4)
-              //  console.log("lot=0", LotNumber_checked)
+                SequenceNumber_checked = checkCompanyCode(0, 9999, MinSequenceNumber, 4)
+                //  console.log("lot=0", LotNumber_checked)
             }
             else {
                 var arrCode = []
                 for (let i = MinSequenceNumber; i <= MaxSequenceNumber; i++) {
-                    SequenceNumber_checked = checkCompanyCode(0, 999, i, 4)
+                    SequenceNumber_checked = checkCompanyCode(0, 9999, i, 4)
                     //console.log(b)
                     let combinedNumberString = CompanyCode_cheked + MethodCode_cheked + BottleSizeCode_checked + ReagentTyprCode_checked + yearhethan_string[yearhethan_string.length - 1] + weeksDiff_checked + LotNumber_checked + SequenceNumber_checked;
-               //     console.log("date,", combinedNumberString)
+                    //     console.log("date,", combinedNumberString)
                     const checkbit = GET_CHECK_BIT(combinedNumberString)
-               //     console.log(checkbit)
+                    //     console.log(checkbit)
                     //console.log("checkbit,",checkbit)
                     if (checkbit >= 0 && checkbit <= 9) {
                         combinedNumberString += checkbit
-                        arrCode.push(combinedNumberString)
+                        arrCode.push({ bottleLot: i, code: combinedNumberString })
                     }
                 }
                 return res.status(200).json({
                     code: 200,
                     message: 'Send command successfully',
                     data: arrCode,
+                    methodecode: getMethodNameByCode(extractSubstring(arrCode[0].code, 3, 4)),
+                    bottlesize: getBottleSizeNameByCode(extractSubstring(arrCode[0].code, 5, 5)),
+                    reagenttype: getReagentTypeNameByCode(extractSubstring(arrCode[0].code, 6, 6)),
+                    dayProduce: `${DayProduce}-${MonthProduce}-${YearProduce}`,
+                    min: MinSequenceNumber,
+                    max: MaxSequenceNumber,
                     date: Ngayhethan
                 })
             }
             //console.log(b)
-          //  console.log("lot", LotNumber_checked)
+            //  console.log("lot", LotNumber_checked)
             let combinedNumberString = CompanyCode_cheked + MethodCode_cheked + BottleSizeCode_checked + ReagentTyprCode_checked + YearProduce[YearProduce.length - 1] + weeksDiff_checked + LotNumber_checked + SequenceNumber_checked;
             const checkbit = GET_CHECK_BIT(combinedNumberString)
             //console.log("string,",combinedNumberString)
@@ -161,21 +168,21 @@ class BarcodeController {
             });
         }
     }
-    static async ReadBarcode (req, res, next){
+    static async ReadBarcode(req, res, next) {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
-        
+
         //const curentyear
         try {
             const barcode = req.query.code
-            const yearOncode = extractSubstring(barcode,7, 7)
-            const namhethan = Tim_nam_het_han_tu_ma_vach(parseInt(yearOncode),currentYear)
+            const yearOncode = extractSubstring(barcode, 7, 7)
+            const namhethan = Tim_nam_het_han_tu_ma_vach(parseInt(yearOncode), currentYear)
             const thu7dautien = Timngaydautienlathu7cua1nam(namhethan)
-            const tuan = extractSubstring(barcode,8, 9)
-            var Ngayhethan = new Date(thu7dautien.getTime() + (parseInt(tuan) - 1) * 7*24 * 60 * 60 * 1000);
+            const tuan = extractSubstring(barcode, 8, 9)
+            var Ngayhethan = new Date(thu7dautien.getTime() + (parseInt(tuan) - 1) * 7 * 24 * 60 * 60 * 1000);
             console.log(Ngayhethan)
             const copanycode = extractSubstring(barcode, 0, 2)
-            
+
             const methodecode = getMethodNameByCode(extractSubstring(barcode, 3, 4))
             const bottlesize = getBottleSizeNameByCode(extractSubstring(barcode, 5, 5))
             const reagenttype = getReagentTypeNameByCode(extractSubstring(barcode, 6, 6))
@@ -202,6 +209,7 @@ class BarcodeController {
         }
     }
 }
+
 function checkCompanyCode(min, max, input, max_n) {
     const numberInput = parseInt(input)
     if (!isNaN(numberInput)) {
@@ -231,7 +239,7 @@ function checkArr(arr, input) {
     const input_number = parseInt(input)
     if (!isNaN(input_number)) {
         if (arr.includes(input_number)) {
-           // console.log("dung")
+            // console.log("dung")
             return input.toString()
         }
     }
@@ -255,17 +263,17 @@ function isValidDate(day, month, year) {
 }
 
 
-function Timngaydautienlathu7cua1nam(year){
- // Trả về ngày mà hôm đó là thứ 7 đầu tiên của năm đó
-    for(let ngayI=1; ngayI<=10;ngayI++){
+function Timngaydautienlathu7cua1nam(year) {
+    // Trả về ngày mà hôm đó là thứ 7 đầu tiên của năm đó
+    for (let ngayI = 1; ngayI <= 10; ngayI++) {
         //const date = new Date( year+ "-0"+`-${ngayI}`)
-       
-         const date = new Date(Date.UTC(year, 0, ngayI));
+
+        const date = new Date(Date.UTC(year, 0, ngayI));
         //console.log("st="+ year+ "-1"+`-${ngayI}`)
-       // date.setUTCHours(0)
+        // date.setUTCHours(0)
         //console.log("Ngay:", date)
         const thu = date.getDay()
-        if(thu == 6){
+        if (thu == 6) {
             return date
         }
     }
@@ -371,7 +379,7 @@ function GET_CHECK_BIT(num_string_18_sscc) {
 }
 
 
-function Tim_nam_het_han_tu_ma_vach (namtrenmavach1conso, namhientai_fullyear){
+function Tim_nam_het_han_tu_ma_vach(namtrenmavach1conso, namhientai_fullyear) {
     // hàm này dựa theo bảng ánh xạ năm hiện tại và số đại diện của năm hết hạn. 
     /*
         Gía trị đầu vào là số cuối đại diện cho năm hết hạn tìm thấy trên mã vạch (số Dy), và truyền vào năm hiện tại dựa trên lịch máy tính 
@@ -384,30 +392,30 @@ function Tim_nam_het_han_tu_ma_vach (namtrenmavach1conso, namhientai_fullyear){
 
 
     let Dy = namtrenmavach1conso
-    if(Dy ==  lay1socuoicuanam(namhientai_fullyear)){
+    if (Dy == lay1socuoicuanam(namhientai_fullyear)) {
         return namhientai_fullyear
     }
 
-      
-    for(let i =0; i<=2;i++ ){
-     let namlui = namhientai_fullyear - i
-     if(Dy ==  lay1socuoicuanam(namlui)){
-        return namlui
+
+    for (let i = 0; i <= 2; i++) {
+        let namlui = namhientai_fullyear - i
+        if (Dy == lay1socuoicuanam(namlui)) {
+            return namlui
+        }
     }
-    }
-    for(let i =1; i<=7;i++ ){
+    for (let i = 1; i <= 7; i++) {
         let namtien = namhientai_fullyear + i
-        if(Dy ==  lay1socuoicuanam(namtien)){
-           return namtien
-       }
-       }
-       return -1
+        if (Dy == lay1socuoicuanam(namtien)) {
+            return namtien
+        }
+    }
+    return -1
 
 }
 
-function lay1socuoicuanam (fullyear){
+function lay1socuoicuanam(fullyear) {
     const nam_string = fullyear.toString()
-    return parseInt( nam_string[nam_string.length-1]) 
+    return parseInt(nam_string[nam_string.length - 1])
 }
 function getNextSaturday(inputDate) {
     var nextSaturday = new Date(inputDate);
@@ -420,33 +428,29 @@ function getNextSaturday(inputDate) {
 function getMethodNameByCode(code) {
     const methodOptions = [
         { value: "01", label: 'ALB (Albumin)' },
-        { value: "20", label: 'ALTGPT (ALT)' },
-        { value: "05", label: 'AMY_IF (Amylase)' },
-        { value: "19", label: 'ASTGOT (AST)' },
-        { value: "48", label: 'BIL-Dv' },
-        { value: "49", label: 'BIL-Tv' },
-        { value: "10", label: 'TC-CHO (Total Cholesterol)' },
+        { value: "20", label: 'ALT (GPT)' },
+        { value: "05", label: 'AMY (alpha - Amylase)' },
+        { value: "19", label: 'AST (GOT)' },
+        { value: "06", label: 'BIL-D (Bilirubin Direct)' },
+        { value: "07", label: 'BIL-T (Bilirubin Total)' },
+        { value: "10", label: 'TC (Total Cholesterol)' },
         { value: "13", label: 'CK-MB' },
-        { value: "15", label: 'CRE_Ja' },
+        { value: "35", label: 'CRE (Creatinine)' },
         { value: "36", label: 'CRP' },
-        { value: "08", label: 'Ca_A3' },
         { value: "16", label: 'GGT' },
-        { value: "17", label: 'GNU_HK' },
         { value: "11", label: 'HDL-C (HDL-Cholesterol)' },
-        { value: "12", label: 'LDN-C (LDL-Cholesterol)' },
+        { value: "12", label: 'LDL-C (LDL - Cholesterol)' },
         { value: "30", label: 'TG (Total Triglycerides)' },
         { value: "29", label: 'TP (Total Protein)' },
         { value: "32", label: 'UA (Uric Acid)' },
-        { value: "31", label: 'UREA (Urea)' },
+        { value: "31", label: 'UN (Urea)' },
         { value: "37", label: 'HbA1c' },
         { value: "02", label: 'ALP' },
         { value: "14", label: 'CK' },
-        { value: "35", label: 'CRE (Creatinine)' },
-        { value: "62", label: 'D-BIL (Direct Bilirubin)' },
         { value: "18", label: 'GLU (Glucose)' },
-        { value: "25", label: 'LDH (Lactate Dehydrogenase)' },
-        { value: "63", label: 'T-BIL (Total Bilirubin)' },
+        { value: "25", label: 'LDH' },
     ];
+
 
     const selectedMethod = methodOptions.find(method => method.value.toString() === code.toString());
     //  console.log(selectedMethod)
@@ -456,11 +460,8 @@ function getMethodNameByCode(code) {
 function getBottleSizeNameByCode(code) {
     const bottleSizeOptions = [
         { code: "1", name: '20ml (square)' },
-        { code: "7", name: '20ml (round)' },
-        { code: "4", name: '40ml' },
-        { code: "5", name: '50ml' },
+
         { code: "3", name: '70ml' },
-        { code: "6", name: '100ml' },
     ];
 
     const selectedBottleSize = bottleSizeOptions.find(size => size.code.toString() === code.toString());
@@ -472,10 +473,7 @@ function getReagentTypeNameByCode(code) {
     const reagentTypeOptions = [
         { code: "1", name: 'R1' },
         { code: "2", name: 'R2' },
-        { code: "3", name: 'R3' },
-        { code: "4", name: 'R4' },
-        { code: "5", name: 'DILUENT' },
-        { code: "6", name: 'WASH SOLUTION' },
+
     ];
 
     const selectedReagentType = reagentTypeOptions.find(type => type.code.toString() === code.toString());
