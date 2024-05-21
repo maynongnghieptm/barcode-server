@@ -15,14 +15,11 @@ app.use(express.json());
 app.use(express.static('public'))
 app.use(cors());
 app.use(morgan('dev'));
-//const server = require('http').createServer(app);
+const server = require('http').createServer(app);
 
 const PORT = 8000;
 
-const options = {
-    key: fs.readFileSync('private-key.pem'),    // Đường dẫn đến tệp khóa riêng tư
-    cert: fs.readFileSync('public-cert.pem'),   // Đường dẫn đến tệp chứng chỉ SSL
-};
+
 //route(app);
 //app.use('/login', authRouter);
 
@@ -56,9 +53,13 @@ app.use((error, req, res, next) => {
 
 //mongoose.set('debug', true);
 //mongoose.set('debug', { color: true });
-const server = https.createServer(options, app);
-mongoose.connect(`${MONGO_URI}/${MONGO_DATABASE}`, {
-    maxPoolSize: 50
+
+mongoose.connect(`${MONGO_URI}`, {
+
+    maxPoolSize: 50,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    dbName: 'barcode'
 })
     .then(result => {
         console.log('Connect to mongodb successfully!');
@@ -66,7 +67,7 @@ mongoose.connect(`${MONGO_URI}/${MONGO_DATABASE}`, {
             console.log(`Server is running on PORT ${PORT}`);
         });
     }).catch(err => {
-        console.log(`${MONGO_URI}/${MONGO_DATABASE}`);
+        console.log(`${MONGO_URI}`);
         console.log('Fail to connect to database');
     });
 /**

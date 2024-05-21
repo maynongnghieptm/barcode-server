@@ -3,8 +3,9 @@ const { createToken } = require("../utils/auth");
 const { SECRET_KEY } = require("../constants");
 class AuthService {
     static async Login(username, password) {
-        console.log(username, password)
+        console.log(UserSchema)
         const user = await UserSchema.findOne({ username });
+        console.log(user)
         if (!user) {
             throw new Error('User has not been registed');
         }
