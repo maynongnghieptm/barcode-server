@@ -13,8 +13,9 @@ const isAuthenticated = async (req, res, next) => {
         if (!accessToken) {
             throw new Error('Invalid request');
         }
+        console.log(11111)
         const decodedUser = verifyToken(accessToken.split(' ')[1], SECRET_KEY);
-       // console.log('decodedUser: ', decodedUser);
+        console.log(33333);
        if (decodedUser.userId !== userId) {
         throw new Error('Invalid user')
     }

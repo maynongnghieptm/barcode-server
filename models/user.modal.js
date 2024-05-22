@@ -15,6 +15,7 @@ var UserSchema = new Schema(
             type: String,
             required: true,
         },
+        refreshToken: { type: String }
     },
     {
         collection: 'Users',
