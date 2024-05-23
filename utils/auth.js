@@ -3,7 +3,7 @@ const JWT = require('jsonwebtoken');
 const createToken = (payload, secretKey) => {
     try {
         const accessToken = JWT.sign(payload, secretKey, {
-            expiresIn: '8h',
+            expiresIn: '10s',
         });
         return accessToken;
     } catch (err) {
@@ -14,7 +14,7 @@ const createToken = (payload, secretKey) => {
 const createRefreshToken = (payload, secretKey) => {
     try {
         const refreshToken = JWT.sign(payload, secretKey, {
-            expiresIn: '15d',
+            expiresIn: '1m',
         });
         return refreshToken;
     } catch (err) {
@@ -29,6 +29,7 @@ const verifyToken = (token, secretKey) => {
         const decoded = JWT.verify(token, secretKey);
         return decoded;
     } catch (error) {
+       
         throw error;
     }
    

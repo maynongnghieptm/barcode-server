@@ -15,7 +15,7 @@ class AuthController{
         } catch (error) {
             return res.json({
                 code: error.statusCode || 500,
-                message: error.message || 'Internal Server Error',
+                message: error.message || 'Login fail',
             });
         }
     }
@@ -32,7 +32,7 @@ class AuthController{
         } catch (error) {
             return res.json({
                 code: error.statusCode || 500,
-                message: error.message || 'Internal Server Error',
+                message: error.message || 'Invalid request',
             });
         }
     }
