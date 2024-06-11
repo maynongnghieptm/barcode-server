@@ -4,5 +4,6 @@ console.log(router)
 const AuthController = require("../controllers/auth.controller")
 // Định nghĩa các tuyến đường cho phần home
 router.post('/login', AuthController.Login);
+router.post('/register', AuthController.Register);
 router.get('/refresh-token', AuthController.RefreshToken);
 module.exports = router;

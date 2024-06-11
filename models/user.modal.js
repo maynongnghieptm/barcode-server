@@ -24,6 +24,18 @@ var UserSchema = new Schema(
 );
 
 
-
+UserSchema.pre('save', async function (next) {
+    if (this.isModified('password') || this.isNew) {
+        try {
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+            next();
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        next();
+    }
+});
 //Export the model
 module.exports = model('User', UserSchema);

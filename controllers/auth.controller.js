@@ -19,6 +19,23 @@ class AuthController{
             });
         }
     }
+    static async Register(req, res, next){
+        try {
+            const username = req.body.username
+            const password = req.body.password
+            await AuthService.Register(username,password)
+            return res.status(200).json({
+                code: 200,
+                message: 'Create new account successfully',
+                
+            });
+        } catch (error) {
+            return res.json({
+                code: error.statusCode || 500,
+                message: error.message || 'Internal Server Error',
+            });
+        }
+    }
     static async RefreshToken(req, res, next){
         try {
             const refreshToken  = req.query.refreshToken

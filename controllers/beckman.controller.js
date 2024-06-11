@@ -1,3 +1,4 @@
+const {chemicalMap, bottleSizeMap, typeCodeMap } = require('../constants/Beckman.constant')
 class BeckmanController {
     static async Genator(req, res, next) {
         try {
@@ -147,41 +148,7 @@ function parseChemicalCode(input) {
     // 1 character for check digit
 
     // Mapping based on provided descriptions
-    const chemicalMap = {
-        "002": "Albumin",
-        "034": "Urea",
-        "007": "ALT",
-        "009": "AST",
-        "098": "Uric Acid",
-        "032": "Total Protein",
-        "004": "ALP",
-        "006": "Amylase",
-        "079": "CK",
-        "155": "CK-MB",
-        "078": "Creatinine",
-        "047": "CRP",
-        "011": "Direct Bilirubin",
-        "020": "GGT",
-        "021": "Glucose",
-        "087": "HDL-Cholesterol",
-        "026": "Lactate Dehydrogenase",
-        "083": "LDL-Cholesterol",
-        "012": "Total Bilirubin",
-        "016": "Total Cholesterol",
-        "118": "Total Triglycerides"
-    };
-
-    const bottleSizeMap = {
-        "01": "30ml",
-        "03": "70ml",
-        "05": "20ml"
-    };
-
-    const typeCodeMap = {
-        "1": "R1",
-        "2": "R2"
-    };
-
+  
     // Mapping for SEQ character
     const SEQ = reverseConvert(seqNumber)
 

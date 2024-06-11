@@ -1,5 +1,6 @@
 const UserSchema = require("../models/user.modal")
 const RefreshTokenSchema = require("../models/refreshToken.modal")
+const bcrypt = require('bcryptjs');
 const { createToken, createRefreshToken, verifyToken } = require("../utils/auth");
 const { SECRET_KEY } = require("../constants");
 class AuthService {
@@ -10,8 +11,9 @@ class AuthService {
         if (!user) {
             throw new Error('User has not been registed');
         }
-        if (password !== user.password) {
-            throw new Error('Password is incorrect');
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            throw new Error('Invalid credentials');
         }
         // const isCorrectPassword = await bcrypt.compare(password, user.password);
         /*
@@ -29,6 +31,14 @@ class AuthService {
         return { token: accessToken,refreshToken:refreshToken , userId: id }
 
 
+    }
+    static async Register(username, password){
+        const isExist = await UserSchema.findOne({username: username})
+        if(isExist){
+            throw new Error('Error: Username has been already registed');
+        }
+        await UserSchema.create({username: username, password: password});
+        return {message: 'User created successfully'}
     }
     static async RefreshToken(uid, refrToken) {
         const storedRefreshTokens = await RefreshTokenSchema.find({ userId: uid });
